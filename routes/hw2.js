@@ -40,7 +40,7 @@ router.param('string', function (req, res, next, value) {
 })
 
 
-//GET Fetch all users
+//Get and display everything in the database.
 router.get('/', function (req, res, next) {
     stg.find({}, function (err, results) {
         res.json(results);
@@ -48,7 +48,7 @@ router.get('/', function (req, res, next) {
 
 })
 
-//GET Fetch single user, match /users/db/Frank
+//Get and display (and, if we have to, create) a given string in  the database.
 router.get('/:string', function (req, res, next) {
     findByString(req.params.string)
         .then(function (status) {
@@ -66,10 +66,12 @@ router.get('/:string', function (req, res, next) {
         })
 })
 
+//You can't post nothing to the database!
 router.post('/', function(req, res, next) {
     res.json({message: 'String is empty; please provide a string.'});
 })
 
+//Posting into the database, checking and returning stuff that's already in the db, otherwise we create it.
 router.post('/:string', function(req, res, next) {
     findByString(req.params.string)
         .then(function (status) {
@@ -86,6 +88,7 @@ router.post('/:string', function(req, res, next) {
         })
 })
 
+//Delete the string, provided it is in the database, otherwise we send the message that the string is not found (because it's not in the db).
 router.delete('/:string', function (req, res, next) {
     findByString(req.params.string)
         .then(function (status) {
